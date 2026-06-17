@@ -46,7 +46,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       return;
     }
 
-    // Fire the BLoC event to talk to FastAPI
+
     context.read<AuthBloc>().add(SignUpRequested(name, email, password));
   }
 

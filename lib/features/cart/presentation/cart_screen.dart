@@ -161,7 +161,7 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  // Helper widget for the sleek pill chips
+
   Widget _buildChip(String label) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),

@@ -15,21 +15,14 @@ class Product {
     required this.imageUrl,
   });
 
-  // This is the magic method your data source is looking for!
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
-      // We use .toString() safely in case the ID comes back as an integer
       id: json['id'].toString(), 
-      name: json['name'] ?? 'Unknown Product',
-      
-      // Using ?? provides a safe default in case the API forgets to send these
-      description: json['description'] ?? 'No description available',
-      
-      // Safely convert the price whether it comes in as an int (24) or double (24.99)
-      price: (json['price'] as num?)?.toDouble() ?? 0.0,
-      
-      stock: json['stock'] ?? 0,
-      imageUrl: json['imageUrl'] ?? '', 
+      name: json['name'],
+      description: json['description'],
+      price: (json['price'] as num).toDouble(),
+      stock: json['stock'] as int,
+      imageUrl: json['image_url'] ?? 'https://via.placeholder.com/400', 
     );
   }
 }

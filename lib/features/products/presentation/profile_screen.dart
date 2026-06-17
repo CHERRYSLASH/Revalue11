@@ -19,7 +19,6 @@ class ProfileScreen extends StatelessWidget {
             const Text('Chereub Rajesh', style: TextStyle(color: Colors.white, fontSize: 20)),
             const SizedBox(height: 40),
             
-            // The Logout Button
             SizedBox(
               width: 200,
               height: 50,

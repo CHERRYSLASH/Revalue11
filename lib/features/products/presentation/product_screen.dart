@@ -32,12 +32,10 @@ class ProductScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          // The "Looks / Products" Top Toggle Pill
           _buildTopToggle(),
           
           const SizedBox(height: 8),
 
-          // The Grid view wrapped in a BLoC Builder
           Expanded(
             child: BlocBuilder<ProductBloc, ProductState>(
               builder: (context, state) {
@@ -65,14 +63,12 @@ class ProductScreen extends StatelessWidget {
             ),
           ),
           
-          // Padding to ensure the floating navbar doesn't cover the bottom row
           const SizedBox(height: 100), 
         ],
       ),
     );
   }
 
-  // 1. The Custom Top Toggle Bar
   Widget _buildTopToggle() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
@@ -114,7 +110,6 @@ class ProductScreen extends StatelessWidget {
     );
   }
 
-  // 2. The Product Grid
   Widget _buildProductGrid(List<Product> products) {
     return GridView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -127,12 +122,12 @@ class ProductScreen extends StatelessWidget {
       itemCount: products.length,
       itemBuilder: (context, index) {
         final product = products[index];
+        print("DEBUG: Loading URL -> '${product.imageUrl}'");
         return GestureDetector(
           onTap: () {
             // Adds the item directly to the global cart BLoC!
             context.read<CartBloc>().add(AddProductToCart(product));
             
-            // Show a quick visual confirmation
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text('${product.name} added to cart'),
@@ -157,11 +152,12 @@ class ProductScreen extends StatelessWidget {
                   child: Image.network(
                     product.imageUrl,
                     fit: BoxFit.cover,
-                    // If the backend image fails to load, show a dark placeholder icon instead of crashing
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return const Center(child: CircularProgressIndicator(color: Colors.white24));
+                    },
                     errorBuilder: (context, error, stackTrace) {
-                      return const Center(
-                        child: Icon(Icons.checkroom, color: Colors.white24, size: 50),
-                      );
+                      return const Center(child: Icon(Icons.checkroom, color: Colors.white24, size: 50));
                     },
                   ),
                 ),
@@ -179,7 +175,6 @@ class ProductScreen extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               
-              // Mocking the "@brand" text from the design
               Text(
                 '@${product.name.replaceAll(' ', '').toLowerCase()}', 
                 style: const TextStyle(

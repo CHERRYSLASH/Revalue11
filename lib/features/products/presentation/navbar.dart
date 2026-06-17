@@ -13,7 +13,6 @@ class MainNavigationShell extends StatefulWidget {
 class _MainNavigationShellState extends State<MainNavigationShell> {
   int _currentIndex = 0;
 
-  // These are the screens the navbar will switch between
   final List<Widget> _screens = [
     const FeedScreen(),         
     const ProductScreen(),    
@@ -24,7 +23,7 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true, // Crucial: lets the body flow behind the floating navbar
+      extendBody: true, 
       body: _screens[_currentIndex],
       bottomNavigationBar: SafeArea(
         child: Container(
@@ -43,7 +42,6 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
               _buildCenterActionButton(),                     // Center (no screen)
               _buildNavIcon(Icons.person_outline, 2), 
               _buildNavIcon(Icons.settings_outlined, 3),        // Profile (Index 2)
-              // Remove the settings icon, as you have no screen 4!
             ],
           ),
         ),
@@ -66,7 +64,6 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
   Widget _buildCenterActionButton() {
     return GestureDetector(
       onTap: () {
-        // Future: Open camera/post creator
       },
       child: Container(
         width: 44,

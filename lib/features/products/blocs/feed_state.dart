@@ -9,7 +9,6 @@ class FeedLoading extends FeedState {}
 class FeedLoaded extends FeedState {
   final List<FeedPost> posts;
   
-  // We pass the posts into the state so the UI can draw them
   FeedLoaded({required this.posts});
 }
 

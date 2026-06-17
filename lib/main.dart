@@ -3,34 +3,35 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'features/auth/blocs/auth_bloc.dart';
 import 'features/auth/blocs/auth_state.dart';
 import 'features/auth/presentation/login_screen.dart';
-// 1. Import your BLoCs
 import 'features/products/blocs/product_bloc.dart';
 import 'features/products/blocs/product_event.dart'; // If you want to load on startup
 import 'features/cart/blocs/cart_bloc.dart';
 import 'features/products/blocs/feed_bloc.dart';
 import 'features/products/data/product_data_source.dart';
 import 'features/products/domain/product_repository.dart';
-// 2. Import your Custom Navigation Shell
+
 import 'features/products/presentation/navbar.dart';
 import 'features/products/blocs/feed_event.dart';
 import 'features/auth/blocs/auth_event.dart';
+
 void main() {
-  runApp(const MyApp());
+  final remoteDataSource = ProductRemoteDataSource();
+  final repository = ProductRepository(remoteDataSource: remoteDataSource);
+  
+  runApp(MyApp(repository: repository)); 
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final ProductRepository repository;
+
+  const MyApp({super.key, required this.repository});
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider<ProductBloc>(
-          create: (context) => ProductBloc(
-            repository: ProductRepository(
-              remoteDataSource: ProductRemoteDataSource(), 
-            ), 
-          )..add(LoadProducts()),
+          create: (context) => ProductBloc(repository: repository)..add(LoadProducts()),
         ),
         BlocProvider<CartBloc>(
           create: (context) => CartBloc(),
@@ -42,12 +43,10 @@ class MyApp extends StatelessWidget {
           create: (context) => AuthBloc()..add(AuthCheckRequested()),
         ),
       ],
-      // 4. The main App configuration
       child: MaterialApp(
         title: 'Revalue',
         debugShowCheckedModeBanner: false, // Hides the annoying "DEBUG" banner
         
-        // 5. Global Dark Theme Configuration
         theme: ThemeData.dark().copyWith(
           scaffoldBackgroundColor: const Color(0xFF0A0A0A), // True-black background
           appBarTheme: const AppBarTheme(
@@ -61,7 +60,6 @@ class MyApp extends StatelessWidget {
           ),
         ),
         
-        // 6. Point the app entry to your custom shell
         home: BlocBuilder<AuthBloc, AuthState>(
           builder: (context, state) {
             // 1. If authenticated, show the app
@@ -69,14 +67,12 @@ class MyApp extends StatelessWidget {
               return const MainNavigationShell();
             }
             
-            // 2. If loading or initial, show a splash/loading spinner
             if (state is AuthLoading || state is AuthInitial) {
               return const Scaffold(
                 body: Center(child: CircularProgressIndicator(color: Colors.white)),
               );
             }
             
-            // 3. Otherwise (Unauthenticated or Error), show the Login screen
             return const LoginScreen();
           },
         ),

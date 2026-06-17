@@ -17,8 +17,7 @@ class _FeedScreenState extends State<FeedScreen> {
   @override
   void initState() {
     super.initState();
-    // Fire the event to load data as soon as the screen initializes
-    // context.read<FeedBloc>().add(LoadFeedPosts()); 
+   
   }
 
   @override
@@ -48,7 +47,7 @@ class _FeedScreenState extends State<FeedScreen> {
           const SizedBox(width: 8),
         ],
       ),
-      // Wrap your body in a BlocBuilder to listen for state changes
+    
       body: BlocBuilder<FeedBloc, FeedState>(
         builder: (context, state) {
           if (state is FeedLoading) {
@@ -59,7 +58,7 @@ class _FeedScreenState extends State<FeedScreen> {
             return Center(child: Text(state.message, style: const TextStyle(color: Colors.red)));
           }
 
-          // IF IT SUCCESSFULLY LOADS, RETURN THE LIST
+     
           if (state is FeedLoaded) {
             return SingleChildScrollView(
               child: Column(
@@ -73,14 +72,12 @@ class _FeedScreenState extends State<FeedScreen> {
             );
           }
 
-          // If it's stuck in Initial, show a text message instead of a blank screen so we know!
           return const Center(child: Text("Waiting for data...", style: TextStyle(color: Colors.grey)));
         },
       ),
     );
   }
 
-  // Passing the specific 'post' data model into the UI builder
   Widget _buildFeedPost(BuildContext context, dynamic post) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), // Added vertical margin for spacing
@@ -92,13 +89,11 @@ class _FeedScreenState extends State<FeedScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Post Header (User Info)
           Row(
             children: [
               CircleAvatar(
                 radius: 18,
                 backgroundColor: Colors.grey.shade800,
-                // Replace hardcoded values with post.userInitials
                 child: const Text('CM', style: TextStyle(fontSize: 12, color: Colors.white)),
               ),
               const SizedBox(width: 12),
@@ -121,7 +116,6 @@ class _FeedScreenState extends State<FeedScreen> {
           ),
           const SizedBox(height: 16),
 
-          // Main Visual Outfit Canvas (Stack for Hotspot Tags)
           AspectRatio(
             aspectRatio: 0.9, 
             child: Stack(
@@ -131,8 +125,6 @@ class _FeedScreenState extends State<FeedScreen> {
                   decoration: BoxDecoration(
                     color: const Color(0xFF1C1C1E),
                     borderRadius: BorderRadius.circular(20),
-                    // If you have an image URL:
-                    // image: DecorationImage(image: NetworkImage(post.imageUrl), fit: BoxFit.cover),
                   ),
                   child: Center(
                     child: Icon(
@@ -148,7 +140,6 @@ class _FeedScreenState extends State<FeedScreen> {
                 Positioned(top: 130, right: 40, child: _buildOutfitTag('Cotton Chinos')),
                 Positioned(bottom: 120, left: 80, child: _buildOutfitTag('Sneakers')),
 
-                // "View items in this look" Floating Bar
                 Positioned(
                   bottom: 16,
                   left: 16,
@@ -175,7 +166,6 @@ class _FeedScreenState extends State<FeedScreen> {
           ),
           const SizedBox(height: 16),
 
-          // Social Engagement Action Bar
           Row(
             children: [
               IconButton(

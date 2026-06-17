@@ -6,17 +6,17 @@ import 'auth_event.dart';
 import 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  // Use 10.0.2.2 for Android Emulator, 127.0.0.1 for iOS Simulator
+
   final String baseUrl = 'http://10.0.2.2:8000/api/auth';
 
   AuthBloc() : super(AuthInitial()) {
     
-    // --- 1. AUTO-LOGIN CHECK ---
+
     on<AuthCheckRequested>((event, emit) async {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('jwt_token');
 
-      // A short delay so the user sees a smooth loading screen
+
       await Future.delayed(const Duration(milliseconds: 800));
 
       if (token != null && token.isNotEmpty) {
@@ -26,7 +26,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
     });
 
-    // --- 2. LOGIN ---
+
     on<LoginRequested>((event, emit) async {
       emit(AuthLoading());
       
@@ -60,7 +60,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
     });
 
-    // --- 3. SIGN UP ---
+
     on<SignUpRequested>((event, emit) async {
       emit(AuthLoading());
       
@@ -79,7 +79,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           final data = jsonDecode(response.body);
           final token = data['access_token'];
           
-          // Save the JWT to the device
+
           final prefs = await SharedPreferences.getInstance();
           await prefs.setString('jwt_token', token);
           
@@ -95,7 +95,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
     });
 
-    // --- 4. LOGOUT ---
+
     on<LogoutRequested>((event, emit) async {
       // Delete the JWT from the device
       final prefs = await SharedPreferences.getInstance();

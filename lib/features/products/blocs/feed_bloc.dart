@@ -5,12 +5,10 @@ import 'feed_event.dart';
 import 'feed_state.dart';
 
 class FeedBloc extends Bloc<FeedEvent, FeedState> {
-  // Keeping a local copy of the posts in memory so we can update likes easily
   List<FeedPost> _currentPosts = [];
 
   FeedBloc() : super(FeedInitial()) {
     
-    // Handle Loading the Feed
     on<LoadFeedPosts>((event, emit) async {
       print("🚀 FEED BLOC: Fetching posts..."); // ADD THIS LINE
       emit(FeedLoading());
@@ -26,16 +24,13 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
       }
     });
 
-    // Handle Liking a Post
     on<ToggleLikePost>((event, emit) {
       if (state is FeedLoaded) {
-        // Find the specific post the user liked
         final postIndex = _currentPosts.indexWhere((post) => post.id == event.postId);
         
         if (postIndex != -1) {
           final post = _currentPosts[postIndex];
           
-          // Toggle the like status and adjust the count
           post.isLikedByMe = !post.isLikedByMe;
           post.likes += post.isLikedByMe ? 1 : -1;
 
@@ -46,8 +41,6 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     });
   }
 
-  // --- MOCK DATA GENERATOR ---
-  // Once your backend is up, you will delete this and use a FeedRepository
   List<FeedPost> _getMockFeed() {
     return [
       FeedPost(

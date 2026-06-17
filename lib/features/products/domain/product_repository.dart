@@ -10,8 +10,7 @@ class ProductRepository {
     try {
       return await remoteDataSource.fetchProducts();
     } catch (e) {
-      // You can handle specific network errors or logging here
-      rethrow; 
+      throw Exception('Repository error: $e');
     }
   }
 }
